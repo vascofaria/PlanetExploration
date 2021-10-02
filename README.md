@@ -2,141 +2,142 @@
 
 # Planet exploration
 
-João Silva, Rafael Henriques, Vasco Faria
-
-Instituto Superior Técnico, Lisbon, Portugal
-
-joao.afonso.silva@tecnico.ulisboa.pt rafael.henriques@tecnico.ulisboa.pt vasco.faria@tecnico.ulisboa.pt
+[João Silva](mailto:joao.afonso.silva@tecnico.ulisboa.pt), [Rafael Henriques](mailto:rafael.henriques@tecnico.ulisboa.pt), [Vasco Faria](mailto:vasco.faria@tecnico.ulisboa.pt) - Instituto Superior Técnico, Lisbon, Portugal
 
 **ABSTRACT**
 
-In this project we implemented an application that shows
-
-the behavior of a multi-agent system where a group of 2 **Environment**
-
-intelligent rovers of two types search and collect different
-
-kinds of resources spread throughout the surface of an The environment is an unexplored planet with resources unknown planet. One type of rover focuses on searching scattered throughout the surface. Visually, the planet is a 3D while the other on collecting. The main problem lies in Sphere Mesh that has resources spread throughout the collecting the resources as efficiently and as quickly as surface as seen in figure 1.
-
-possible. We solved the problem using both reactive and ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.001.png)hybrid architectures. The whole project was implemented using the Unity framework. 
+In this project we implemented an application that shows the behavior of a multi-agent system where a group of intelligent rovers of two types search and collect different kinds of resources spread throughout the surface of an unknown planet. One type of rover focuses on searching while the other on collecting. The main problem lies in collecting the resources as efficiently and as quickly as possible. We solved the problem using both reactive and hybrid architectures. The whole project was implemented using the Unity framework.
 
 1 **Introduction** 
 
-An imaginary space team found a **new planet with many new resources to discover**. This team decided to set up a base camp on this planet and send **intelligent rovers to explore and gather the resources** (the places of the resources is not known in advance). The base camp has an arbitrary number of **rovers of two kinds, scouts** (small and very quick rovers that scout the planet and find resources) and **collectors** (large and slow rovers that collect resources). There are also **multiple kinds of resources,** Figure 1 - unexplored planet
+An imaginary space team found a **new planet with many new resources to discover**. This team decided to set up a base camp on this planet and send **intelligent rovers to explore and gather the resources** (the places of the resources is not known in advance). The base camp has an arbitrary number of **rovers of two kinds, scouts** (small and very quick rovers that scout the planet and find resources) and **collectors** (large and slow rovers that collect resources). There are also **multiple kinds of resources, small, medium and large**. A collector can only carry a certain amount of resources, depending on its kind, so the main problem that arises is how can we speed up the process of collecting resources. The agents have to **negotiate**, to decide which resources are collected by who and **cooperate** when carrying a large resource that requires two agents to be transported.
 
-**small, medium and large**. A collector can only carry a
+The main objective of the project is to develop a multi-agent system where agents have to cooperate to collect all the planet samples as fast as possible.
 
-certain amount of resources, depending on its kind, so the We decided to use an actual sphere instead of a plane, for main problem that arises is how can we speed up the example, as it brings complexity to the problem and makes process of collecting resources. The agents have to the end result a lot more interesting to watch.
+2 **Environment**
 
-**negotiate**, to decide which resources are collected by wh
+The environment is an unexplored planet with resources scattered throughout the surface. Visually, the planet is a 3D Sphere Mesh that has resources spread throughout the surface as seen in figure 1.
 
-and **cooperate** when carrying a large resource that requires 2.1 **Properties**
+<p align="center">
+  <img src="imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.001.png" /><br />
+  Figure 1 - unexplored planet
+</p>
 
-two agents to be transported.
+We decided to use an actual sphere instead of a plane, for example, as it brings complexity to the problem and makes the end result a lot more interesting to watch.
 
-The environment is **inaccessible** since the rovers only have The main objective of the project is to develop a multi-agent information about the part of the environment they saw, and system where agents have to cooperate to collect all the that information isn’t always accurate. The environment is planet samples as fast as possible. **non-deterministic** because the rovers, while moving, have
+2.1 **Properties**
 
-a low chance of breaking down. The environment is
-
-**dynamic** because the rovers are deliberating while rovers
-
-are changing the environment by moving resources. The
-
-environment is **discrete** because the rovers have a finite
-
-number of actuators and sensors (described later in this
-
-section). And the environment is **non-episodic** because it
-
-cannot be separated into independant intervals, the
-
-resources collected will always have an influence on the
-
-future of the scenario.
+The environment is **inaccessible** since the rovers only have information about the part of the environment they saw, and that information isn’t always accurate. The environment is **non-deterministic** because the rovers, while moving, have a low chance of breaking down. The environment is **dynamic** because the rovers are deliberating while rovers are changing the environment by moving resources. The environment is **discrete** because the rovers have a finite number of actuators and sensors (described later in this section). And the environment is **non-episodic** because it cannot be separated into independant intervals, the resources collected will always have an influence on the future of the scenario.
 
 The resources can be divided into three kinds:
 
 - Small resources (figure 2)
-- Collector rovers can carry up to three ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.002.png)
+  - Collector rovers can carry up to three
 
-![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.003.png)
-
-Figure 2 - small resource 
+<p align="center">
+  <img src="imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.003.png" /><br />
+  Figure 2 - small resource 
+</p>
 
 - Medium resources (figure 3) 
-- Collector rovers can only carry one at a time 
+  - Collector rovers can only carry one at a time 
 
-![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.004.png) Figure 5 - Ignore angle and direction
-
-Figure 3 - medium resource 3 **Agents**
+<p align="center">
+  <img src="imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.004.png" /><br />
+  Figure 3 - medium resource
+</p>
 
 - Large resources (figure 4)
+  - Needs two collector rovers to be carried
 
-Each agent is a rover that behaves independently but may
+<p align="center">
+  <img src="imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.005.png" /><br />
+  Figure 4 - large resource
+</p>
 
-- Needs two collector rovers to be carried
+This environment is highly configurable, it is possible to specify the radius of the planet and the number of each kind of resource. The resources are randomly spread throughout the surface.
 
-interact with the others. There are two kinds of rovers, each with its own different sensors and actuators.![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.005.png)
+2.2 **Implementation**
+
+The main implementation challenge lay in **placing the resources randomly throughout the surface and ensuring that they were spawned an arbitrary radius away from the main base.**
+
+To spawn resources randomly throughout the surface, for each resource we define an ignore vector, I, and an ignore radius, a, both represented in figure 5. We calculate a random unit vector, R and then the angle B between R and I. While this angle is below a we generate another unit vector, R, until vector is no longer within the a. The position in the planet’s surface is then calculated as follows: PC + R x PR where PC is the planet's center position and PR the redius of the planet.
+
+<p align="center">
+  <img src="imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.002.png" /><br />
+  Figure 5 - Ignore angle and direction
+</p>
+
+3 **Agents**
+
+Each agent is a rover that behaves independently but may interact with the others. There are two kinds of rovers, each with its own different sensors and actuators.
 
 3.1 **Scout Rover**
 
-The goal of the scout rover is to quickly travel across the planet and using his sensors find resources and broken Figure 4 - large resource rovers. Then it should inform the collectors of the resource’s position or broken rover’s position. To fulfill these
+The goal of the scout rover is to quickly travel across the planet and using his sensors find resources and broken rovers. Then it should inform the collectors of the resource’s position or broken rover’s position. To fulfill these necessities we decided to give it the following sensors and actuators:
 
-necessities we decided to give it the following sensors and
-
-This environment is highly configurable, it is possible to actuators:
-
-specify the radius of the planet and the number of each kind
-
-of resource. The resources are randomly spread throughout **Sensors**
-
-the surface. ● Resource detector with a very large radius
-
-- Antenna, receives messages from other rovers
-
-2.1 **Implementation** within a large range
-
-- Fuel measurer that detects the state of the fuel
-
-The main implementation challenge lay in **placing the** tank
-
-**resources randomly throughout the surface** and
-
-**ensuring that they were spawned an arbitrary radius Actuators**
-
-**away from the main base**. ● Move randomly / towards base. This actuator has
-
-a low chance of failure where the fuel tank breaks To spawn resources randomly throughout the surface, for and its current fuel jumps immediately to zero.![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.006.png)
-
-each resource we define an ignore vector, , and an ignore ● Send message
-
-radius, ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.007.png), both represented in figure 5. We calculate a
-
-random unit vector,![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.008.png) and then the angle ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.009.png) between ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.008.png) and ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.006.png). While this angle is below ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.007.png) we generate another unit 3.2 **Collector Rover**
-
-vector, ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.008.png), until the unit vector is no longer within the ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.007.png). The
-
-position in the planet’s surface is then calculated as follows: The collector rover is heavy and slow but its large storage is where capable of carrying different kinds of resources. This rover
-
-the radius of the planet.is the planet’s center position can also help any broken rover by carrying a full fuel tank to and![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.010.png)![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.011.png)![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.012.png)
-
-them. These are their sensors and actuators:
-
-**Sensors ![](imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.013.png)**
-
-- Antenna, receives messages from other rovers within a large range 
-- Fuel measurer detects amount of fuel on agent 
+**Sensors**
+- Resource detector with a very large radius
+- Antenna, receives messages from other rovers within a large range
+- Fuel measurer that detects the state of the fuel tank
 
 **Actuators** 
 
 - Move towards resource / base / rover. This actuator has a low chance of failure where the fuel tank breaks and its current fuel jumps immediately to zero. 
 - Send message 
-- Grab / Drop resource 
-- Grab / Deliver gasoline 
 
-3.3 **Implementation** 
+3.2 **Collector Rover**
 
-Figure 6 - Vectors from arrive on a spherical surface
+The collector rover is heavy and slow but its large storage is capable of carrying different kinds of resources. This rover can also help any broken rover by carrying a full fuel tank to them. These are their sensors and actuators:
+
+**Sensors**
+- Antenna, receives messages from other rovers within a large range
+- Fuel measurer detects amount of fuel on agent
+
+**Actuators** 
+
+- Move towards resource / base / rover. This actuator has a low chance of failure where the fuel tank breaks and its current fuel jumps immediately to zero. 
+- Send message
+- Grab / Drop resource
+- Grab / Deliver gasoline
+
+3.3 **Implementation**
+
+Most of the actuators were simple to implement, with the exception of movement actuators since they act on a spherical surface. For these reasons we will only enter in detail for the movement actuators.
+
+From the start we decided to use the **AI movement algorithms for games** and adapt them to work on a spherical surface since they are very robust and customizable. In particular we implemented a subset of the **steering behaviors**: Arrive[1], Look Where You’re Going[2] and Wander[3].
+
+**Arrive** allows the rovers to move towards a target point and slow down when arriving at the point. To make this algorithm work on a spherical surface we have to alter the target to arrive at, because it can no longer be a point in 3D space, otherwise if this point was on the other side of the planet then the rover would go through the surface of the planet.
+
+The solution is to create a target close to the rover’s position and within the plane tangent to the rover’s position on the planet. First we calculate a vector from the center of the planet to the actual target position, CT, then we calculate another vector from the center of the planet to the position of the rover, CR. Then we calculate the cross product between the CT and CR, O. Finally the cross product between CR and O creates a vector that points to the target's position, but tangent to the planet’s surface marked as green in figure 6. Outlined in red is the target point. The aforementioned vectors are all represented in figure 6.
+
+<p align="center">
+  <img src="imgs/Aspose.Words.314a6651-5978-4e6a-8cd8-d62d66da1a1d.013.png" /><br />
+  Figure 6 - Vectors from arrive on a spherical surface
+</p>
+
+**Look Where You’re Going** ensures that the rovers face the direction of movement without making the rotations too abrupt, everything is done with angular accelerations which makes turns really smooth and natural.
+
+**Wander** is used by the Scout Rovers to move randomly throughout the planet, each frame the algorithm calculates a new linear acceleration that is integrated in the scout movement to make it change direction. This linear acceleration is calculated in a way that the rover does not change direction too quickly which would happen if its movement direction was calculated from a random direction.
+
+**Both** these two algorithms did not need any adaptations to work on a spherical surface.
+
+4 **Architectures / Decision Making**
+
+4.1 **Reactive agents:**
+
+In this version of the project we decided to use reactive agents for both rovers with a **subsumption architecture**. The rovers that can communicate between themselves. The scouts **wander** around the planet **until they find a resource/ broken rover (points of interest aka POI)** and then they will **go back to base while broadcasting** the location. The collectors will **wait in base** for a task from the scout, when they receive one they go to the point of interest’s location, **accomplish the task and go back to base waiting for further tasks.**
+
+**Scout Rovers:**
+
+The scout’s internal state is composed by the following parameters:
+- The base’s location.
+- Its location.
+- A parameter that records if it has found a POI and has its location as well as the kind of point.
+
+
+
+
 
 Most of the actuators were simple to implement, with the
 
